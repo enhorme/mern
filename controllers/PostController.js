@@ -1,4 +1,5 @@
 import PostModel from "../models/Post.js";
+import post from "../models/Post.js";
 
 export const createPost = async (req, res) => {
   try {
@@ -25,6 +26,23 @@ export const getAll = async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Get posts error" });
+  }
+};
+
+export const getTags = async (req, res) => {
+  try {
+    const posts = await PostModel.find().limit(5).exec();
+
+    const tags = posts
+      .map((el) => el.tags)
+      .flat()
+      .filter(Boolean)
+      .slice(0.5);
+
+    res.json(tags);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Getting tags error" });
   }
 };
 

@@ -1,5 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
+import multer from "multer";
+import cors from "cors";
+
 import {
   createPostValidation,
   loginValidation,
@@ -22,6 +25,19 @@ mongoose
 const app = express();
 const PORT = 7777;
 
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (_, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+app.use("/uploads", express.static("uploads"));
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -55,7 +71,11 @@ app.post(
 app.get("/posts", PostController.getAll);
 app.get("/posts/:id", PostController.getOne);
 app.delete("/posts/:id", checkAuth, PostController.deletePost);
-app.patch("/posts/:id", checkAuth, PostController.update);
+app.patch("/posts/:id", checkAuth, createPostValidation, PostController.update);
+
+//tags
+
+app.get("/tags", PostController.getTags);
 
 app.listen(PORT, (err) => {
   if (err) return console.log(err);
