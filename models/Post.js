@@ -14,6 +14,9 @@ const PostSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    imageUrl: {
+      type: String,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

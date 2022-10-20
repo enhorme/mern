@@ -6,8 +6,8 @@ export const login = async (req, res) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(404).json({
-        message: "Auth Error",
+      return res.status(401).json({
+        message: "Auth Error username",
       });
     }
     const isValidPassword = await bcrypt.compare(
@@ -15,8 +15,8 @@ export const login = async (req, res) => {
       user._doc.passwordHash
     );
     if (!isValidPassword) {
-      return res.status(400).json({
-        message: "Auth Error pass",
+      return res.status(401).json({
+        message: "Auth Error password",
       });
     }
 

@@ -8,6 +8,7 @@ export const createPost = async (req, res) => {
       text: req.body.text,
       tags: req.body.tags,
       user: req.userId,
+      imageUrl: req.body.imageUrl,
     });
 
     const post = await docPost.save();
@@ -72,7 +73,7 @@ export const getOne = async (req, res) => {
 
         res.json(doc);
       }
-    );
+    ).populate("user");
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "get posts error" });
